@@ -1,11 +1,16 @@
-#include "value.h"
+#include "MLP.h"
 
 int main()
 {
-    Value a(0.5f, "a"), b(1.0f, "b"), c(3.0f, "c");
-    Value d = c.pow(2.0f*(a + b));
-    d->backward();
-    d->printTree();
+    std::vector<Value> in({
+        Value(0.0f, "in1"),
+        Value(0.0f, "in2"),
+        Value(0.0f, "in3")
+    });
+    MLP mlp(in, {4, 4, 1});
+
+    mlp.outs[0]->backward();
+    mlp.outs[0]->print();
 
     return 0;
 }

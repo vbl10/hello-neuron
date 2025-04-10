@@ -5,6 +5,10 @@
 #include <set>
 #include <format>
 
+void Value::Core::print()
+{
+    printf("%s[val: %.3f, grad: %.3f]\n", label.c_str(), val, grad);
+}
 void Value::Core::printTree(int depth)
 {
     printf("%*s%s[val: %.3f, grad: %.3f]: {", depth * 2, "", label.c_str(), val, grad);
@@ -42,6 +46,9 @@ void Value::Core::_forward()
     case OPERATION::POW:
         val = std::pow(prev[0]->val, prev[1]->val);
         break;
+    case OPERATION::TANH:
+        val = std::tanh(prev[0]->val);
+        break;
     }
 }
 void Value::Core::backward()
@@ -70,6 +77,9 @@ void Value::Core::_backward()
     case OPERATION::POW:
         prev[0]->grad += prev[1]->val * std::pow(prev[0]->val, prev[1]->val - 1.0f) * grad;
         prev[1]->grad += std::log(prev[0]->val) * std::pow(prev[0]->val, prev[1]->val) * grad;
+        break;
+    case OPERATION::TANH:
+        prev[0]->grad += (1.0f - val * val) * grad;
         break;
     }
 }
@@ -107,7 +117,7 @@ Value::Core *Value::operator->() const
 }
 Value Value::operator+(const Value &rhs) const
 {
-    Value out(core->val + rhs->val, "(" + core->label + "+" + rhs->label + ")");
+    Value out(core->val + rhs->val, "+");
     out->operation = OPERATION::ADD;
     out->prev.push_back(core);
     out->prev.push_back(rhs.core);
@@ -115,7 +125,7 @@ Value Value::operator+(const Value &rhs) const
 }
 Value Value::operator*(const Value &rhs) const
 {
-    Value out(core->val * rhs->val, "(" + core->label + "*" + rhs->label + ")");
+    Value out(core->val * rhs->val, "*");
     out->operation = OPERATION::MULT;
     out->prev.push_back(core);
     out->prev.push_back(rhs.core);
@@ -123,10 +133,17 @@ Value Value::operator*(const Value &rhs) const
 }
 Value Value::pow(const Value &rhs) const
 {
-    Value out(std::pow(core->val, rhs->val), "(" + core->label + "^" + rhs->label + ")");
+    Value out(std::pow(core->val, rhs->val), std::format("^", core->label, rhs->label));
     out->operation = OPERATION::POW;
     out->prev.push_back(core);
     out->prev.push_back(rhs.core);
+    return out;
+}
+Value Value::tanh() const
+{
+    Value out(std::tanh(core->val), std::format("tanh()", core->label));
+    out->operation = OPERATION::TANH;
+    out->prev.push_back(core);
     return out;
 }
 

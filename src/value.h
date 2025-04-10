@@ -1,3 +1,6 @@
+#ifndef VALUE_H
+#define VALUE_H
+
 #include <memory>
 #include <vector>
 #include <string>
@@ -10,7 +13,8 @@ private:
         NONE,
         ADD,
         MULT,
-        POW
+        POW,
+        TANH
     };
 
     class Core
@@ -26,6 +30,7 @@ private:
 
     public:
         Core(float val, const std::string& label) :val(val), label(label) {}
+        void print();
         void printTree(int depth = 0);
 
         //forward changes in values through network
@@ -42,13 +47,14 @@ private:
 
 public:
     Value(float val, const std::string& label);
-    Value(float val);
+    Value(float val = 0.0f);
 
     Core* operator->() const;
 
     Value operator+(const Value& rhs) const;
     Value operator*(const Value& rhs) const;
     Value pow(const Value& rhs) const;
+    Value tanh() const;
 
     Value operator+(float rhs) const { return operator+(Value(rhs)); }
     Value operator*(float rhs) const { return operator*(Value(rhs)); }
@@ -57,3 +63,5 @@ public:
 
 Value operator+(float lhs, const Value& rhs);
 Value operator*(float lhs, const Value& rhs);
+
+#endif
