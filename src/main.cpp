@@ -20,7 +20,7 @@ int main()
 
     auto mlpParams = mlp.getParams();
 
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; i < 100; i++)
     {
         Value loss;
         for (int j = 0; j < xs.size(); j++)
@@ -40,9 +40,15 @@ int main()
     
     std::cout << "Loss: " << loss->val << std::endl;
 
-    std::cout << "MLP:\n";
+    std::cout << "MLP Params:\n";
     for (int i = 0; i < mlpParams.size(); i++)
         std::cout << "  " << mlpParams[i]->val << std::endl;
+
+    std::cout << "Test:\n";
+    for (int i = 0; i < xs.size(); i++)
+    {
+        std::cout << "  ys: " << ys[i]->val << " | ypred: " << mlp(xs[i])[0]->val << std::endl;
+    }
 
     return 0;
 }
