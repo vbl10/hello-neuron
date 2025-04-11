@@ -52,6 +52,7 @@ public:
     Core* operator->() const;
 
     Value operator+(const Value& rhs) const;
+    Value operator-(const Value& rhs) const;
     Value operator*(const Value& rhs) const;
     Value pow(const Value& rhs) const;
     Value tanh() const;

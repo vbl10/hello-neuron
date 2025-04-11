@@ -10,23 +10,29 @@ float rand1()
     return dist(gen);
 }
 
-Neuron::Neuron(const std::vector<Value>& in, const std::string& label)
+Neuron::Neuron(unsigned int nin, const std::string& label)
     :
-    in(in),
     b(rand1(), (label.empty() ? "" : label + "_") + "b")
 {
     auto prefix = (label.empty() ? "" : label + "_");
-    for (int i = 0; i < in.size(); i++)
+    for (int i = 0; i < nin; i++)
         w.push_back(Value(rand1(), prefix + "w" + std::to_string(i + 1)));
     
-    act = b;
-    for (int i = 0; i < in.size(); i++)
-        act = act + w[i] * in[i];
-    act = act.tanh();
+    
 }
 
-Value Neuron::operator()() const
+std::vector<Value> Neuron::getParams() const
 {
-    act->forward();
+    std::vector<Value> params = w;
+    params.push_back(b);
+    return params;
+}
+Value Neuron::operator()(const std::vector<Value>& in) const
+{
+    auto act = b;
+    for (int i = 0; i < w.size(); i++)
+        act = act + w[i] * in[i];
+    act = act.tanh();
+    
     return act;
 }

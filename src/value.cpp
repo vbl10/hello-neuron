@@ -123,6 +123,10 @@ Value Value::operator+(const Value &rhs) const
     out->prev.push_back(rhs.core);
     return out;
 }
+Value Value::operator-(const Value &rhs) const
+{
+    return (*this) + -1.0f * rhs;
+}
 Value Value::operator*(const Value &rhs) const
 {
     Value out(core->val * rhs->val, "*");

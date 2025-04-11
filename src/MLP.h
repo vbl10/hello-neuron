@@ -7,15 +7,15 @@ class MLP
 {
 public:
     std::vector<Layer> layers;
-    std::vector<Value> outs;
 
     MLP(
-        const std::vector<Value>& in, 
+        unsigned int nin, 
         const std::vector<unsigned int>& nouts, 
         const std::string& label = ""
     );
 
-    const std::vector<Value>& operator()() const;
+    std::vector<Value> getParams() const;
+    std::vector<Value> operator()(const std::vector<Value>& in) const;
 };
 
 #endif

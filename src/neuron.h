@@ -7,14 +7,13 @@
 class Neuron
 {
 public:
-    const std::vector<Value>& in;
     std::vector<Value> w;
     Value b;
-    Value act;
 
-    Neuron(const std::vector<Value>& in, const std::string& label = "");
+    Neuron(unsigned int nin, const std::string& label = "");
 
-    Value operator()() const;
+    std::vector<Value> getParams() const;
+    Value operator()(const std::vector<Value>& in) const;
 };
 
 #endif

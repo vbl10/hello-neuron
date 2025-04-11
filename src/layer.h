@@ -8,11 +8,11 @@ class Layer
 {
 public:
     std::vector<Neuron> neurons;
-    std::vector<Value> outs;
 
-    Layer(const std::vector<Value>& in, unsigned int nout, const std::string& label = "");
+    Layer(unsigned int nin, unsigned int nout, const std::string& label = "");
 
-    const std::vector<Value>& operator()() const;
+    std::vector<Value> getParams() const;
+    std::vector<Value> operator()(const std::vector<Value>& in) const;
 };
 
 #endif
